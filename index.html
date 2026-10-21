@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TRAANAA | Revised Product Features Atlas</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Mukta:wght@400;500;600;700&display=swap');
+    :root { --navy:#0f172a; --ink:#172033; --muted:#64748b; --line:#dbe3ee; --paper:#f7f9fc; --surface:#fff; --gold:#f59e0b; --gold-pale:#fff5d9; --green:#10b981; --orange:#f97316; --red:#ef4444; --blue:#3b82f6; --black:#030712; --shadow:0 16px 42px rgba(15,23,42,.10); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:Mukta, sans-serif; font-size:17px; line-height:1.45; }
+    button, input { font:inherit; }
+    button { cursor:pointer; }
+    .shell { display:grid; grid-template-columns:282px minmax(0,1fr); min-height:100vh; }
+    .rail { position:sticky; top:0; height:100vh; overflow:auto; padding:25px 18px; background:var(--navy); color:#e2e8f0; }
+    .brand { display:flex; gap:12px; align-items:center; margin:0 8px 28px; }
+    .brand-mark { width:40px; height:40px; display:grid; place-items:center; border-radius:12px; background:var(--gold); color:var(--navy); font-weight:700; font-size:22px; }
+    .brand strong { display:block; color:#fff; letter-spacing:.05em; font-size:18px; }
+    .brand span { color:#94a3b8; font-size:12px; }
+    .rail-label { margin:20px 9px 8px; color:#94a3b8; text-transform:uppercase; letter-spacing:.14em; font-size:11px; font-weight:700; }
+    .rail button, .rail a { width:100%; display:block; border:0; border-radius:9px; padding:9px 10px; margin:2px 0; background:transparent; color:#cbd5e1; text-align:left; text-decoration:none; font-weight:600; }
+    .rail button:hover, .rail button.active, .rail a:hover { background:#1e293b; color:#fff; }
+    .rail .count { float:right; color:#94a3b8; font-family:'IBM Plex Mono',monospace; font-size:11px; }
+    main { min-width:0; }
+    .hero { padding:64px clamp(24px,6vw,90px) 52px; background:linear-gradient(135deg,#0b132b 0%,#16253d 58%,#223452 100%); color:#fff; }
+    .hero-grid { max-width:1180px; margin:auto; display:grid; grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr); gap:45px; align-items:end; }
+    .eyebrow { color:#fbbf24; text-transform:uppercase; letter-spacing:.18em; font-size:12px; font-weight:700; }
+    h1 { max-width:800px; margin:12px 0 12px; font-size:clamp(38px,5vw,72px); line-height:.98; letter-spacing:-.035em; }
+    .hero p { max-width:750px; margin:0; color:#cbd5e1; font-size:20px; }
+    .hero-note { padding:20px; border:1px solid #334155; border-radius:16px; background:rgba(15,23,42,.55); }
+    .hero-note strong { display:block; margin-bottom:8px; color:#f8fafc; }
+    .hero-note p { font-size:15px; color:#cbd5e1; }
+    .toolbar { position:sticky; top:0; z-index:5; display:flex; gap:12px; align-items:center; padding:14px clamp(24px,6vw,90px); border-bottom:1px solid var(--line); background:rgba(247,249,252,.94); backdrop-filter:blur(12px); }
+    .search { flex:1; min-width:180px; padding:11px 14px; border:1px solid #cbd5e1; border-radius:10px; background:#fff; color:var(--ink); }
+    .tool-button { border:1px solid #cbd5e1; border-radius:10px; padding:10px 14px; background:#fff; color:var(--navy); font-weight:700; }
+    .tool-button:hover { border-color:var(--gold); }
+    .content { max-width:1180px; margin:0 auto; padding:42px clamp(24px,6vw,90px) 80px; }
+    .overview { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:48px; }
+    .metric { padding:18px; border:1px solid var(--line); border-radius:14px; background:var(--surface); box-shadow:0 8px 24px rgba(15,23,42,.04); }
+    .metric b { display:block; font-family:'IBM Plex Mono',monospace; font-size:26px; color:var(--navy); }
+    .metric span { color:var(--muted); font-size:14px; }
+    .section-head { display:flex; justify-content:space-between; gap:24px; align-items:end; margin:52px 0 20px; border-bottom:2px solid var(--navy); padding-bottom:13px; }
+    .section-head h2 { margin:0; font-size:30px; line-height:1; }
+    .section-head p { margin:0; color:var(--muted); text-align:right; }
+    .feature { margin:24px 0 34px; }
+    .feature-head { display:flex; gap:16px; align-items:flex-start; padding:18px 20px; border:1px solid var(--line); border-bottom:0; border-radius:14px 14px 0 0; background:#eef3f8; }
+    .feature-id { flex:none; color:var(--navy); font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; }
+    .feature-head h3 { margin:0; font-size:23px; line-height:1.1; }
+    .feature-head p { margin:5px 0 0; color:var(--muted); }
+    .status { flex:none; margin-left:auto; padding:5px 9px; border-radius:999px; font-size:11px; font-weight:700; letter-spacing:.04em; white-space:nowrap; }
+    .status.shipped { background:#d1fae5; color:#047857; }
+    .status.limited { background:#ffedd5; color:#c2410c; }
+    .story { margin:12px 0; border:1px solid var(--line); border-radius:14px; background:#fff; overflow:hidden; box-shadow:0 6px 20px rgba(15,23,42,.04); }
+    .story[hidden] { display:none; }
+    .story summary { display:flex; gap:12px; align-items:flex-start; padding:17px 20px; list-style:none; cursor:pointer; }
+    .story summary::-webkit-details-marker { display:none; }
+    .story summary:after { content:'+'; margin-left:auto; color:var(--muted); font-size:23px; line-height:1; }
+    .story[open] summary:after { content:'−'; }
+    .story-id { flex:none; padding-top:3px; color:#b45309; font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; }
+    .story-title { font-size:19px; font-weight:600; line-height:1.25; }
+    .story-body { display:grid; grid-template-columns:minmax(0,1fr) minmax(340px,.92fr); gap:25px; padding:0 20px 22px; }
+    .story-body h4 { margin:18px 0 8px; color:var(--muted); text-transform:uppercase; letter-spacing:.12em; font-size:11px; }
+    .criteria { margin:0; padding-left:22px; }
+    .criteria li { margin:7px 0; }
+    .criteria code, .meta code { padding:2px 5px; border-radius:4px; background:#eef2f7; font-family:'IBM Plex Mono',monospace; font-size:.78em; }
+    .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; align-content:start; }
+    .step { min-width:0; }
+    .step-label { display:block; margin-bottom:6px; color:var(--muted); font-size:12px; font-weight:600; }
+    .step img, .placeholder { display:block; width:100%; aspect-ratio:9/16; object-fit:cover; border-radius:10px; border:1px solid #cbd5e1; background:#030712; }
+    .step img { cursor:zoom-in; }
+    .step small { display:block; margin-top:5px; color:var(--muted); font-size:11px; }
+    .live small { color:#047857; }
+    .archive small { color:#64748b; }
+    .placeholder { display:grid; place-items:center; padding:16px; color:#94a3b8; text-align:center; font-size:12px; }
+    .meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; color:var(--muted); font-size:13px; }
+    .meta span { padding:4px 8px; border-radius:999px; background:#f1f5f9; }
+    .callout { margin:25px 0; padding:18px 20px; border-left:4px solid var(--gold); border-radius:0 12px 12px 0; background:var(--gold-pale); }
+    .callout strong { display:block; margin-bottom:5px; }
+    .limitations { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+    .limitation { padding:18px; border:1px solid var(--line); border-radius:14px; background:#fff; }
+    .limitation h3 { margin:0 0 7px; font-size:18px; }
+    .limitation p { margin:0; color:var(--muted); }
+    footer { padding:28px clamp(24px,6vw,90px); border-top:1px solid var(--line); background:#eaf0f6; color:var(--muted); font-size:14px; }
+    .lightbox { position:fixed; inset:0; z-index:20; display:none; place-items:center; padding:30px; background:rgba(3,7,18,.84); }
+    .lightbox.show { display:grid; }
+    .lightbox img { max-width:min(92vw,650px); max-height:90vh; border-radius:12px; box-shadow:0 20px 80px #000; }
+    .lightbox button { position:absolute; top:18px; right:22px; border:0; background:transparent; color:#fff; font-size:38px; }
+    @media (max-width:1000px) { .shell { display:block; } .rail { position:relative; height:auto; display:flex; flex-wrap:wrap; gap:5px; padding:12px; } .brand { width:100%; margin:4px; } .rail-label { display:none; } .rail button { width:auto; } .rail .count { display:none; } .hero-grid { grid-template-columns:1fr; } .story-body { grid-template-columns:1fr; } }
+    @media (max-width:650px) { .toolbar { flex-wrap:wrap; } .overview, .limitations { grid-template-columns:1fr 1fr; } .section-head { display:block; } .section-head p { margin-top:8px; text-align:left; } .feature-head { display:block; } .status { display:inline-block; margin:10px 0 0; } }
+    @media print { body { background:#fff; font-size:12pt; } .rail, .toolbar, .lightbox, .tool-button, .search { display:none !important; } .shell { display:block; } .hero { color:#000; background:#fff; padding:25px 0; border-bottom:2px solid #000; } .hero p, .hero-note p { color:#000; } .hero-note { border:1px solid #999; } .content { max-width:none; padding:20px 0; } .story { break-inside:avoid; box-shadow:none; } .story-body { display:grid !important; grid-template-columns:1fr 1fr; } .step img, .placeholder { aspect-ratio:9/16; } .section-head, .feature-head { break-after:avoid; } a { color:#000; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail" id="rail">
+      <div class="brand"><div class="brand-mark">T</div><div><strong>TRAANAA</strong><span>Feature atlas / Oct 2026</span></div></div>
+      <div class="rail-label">Navigate</div>
+      <a href="#top">Overview</a>
+      <div class="rail-label">Epics</div>
+      <div id="nav"></div>
+      <div class="rail-label">View</div>
+      <button id="expand">Expand all</button>
+      <button id="collapse">Collapse all</button>
+    </aside>
+    <main id="top">
+      <header class="hero">
+        <div class="hero-grid">
+          <div><div class="eyebrow">Revised product features / visual acceptance atlas</div><h1>Every story has a screen, a state, or an honest black box.</h1><p>A step-by-step visual index of the shipped TRAANAA product, organized as Epic, Feature, User Story, and Acceptance Criteria.</p></div>
+          <div class="hero-note"><strong>Capture note</strong><p>Repository captures are used where available. Fresh live captures are marked LIVE. A black frame means the story has no captured user-facing screen, is backend-only, or could not be reached on the currently available device topology.</p><div class="meta"><span>40 user stories</span><span>8 epics</span><span>2 live-device lanes</span><span>phone lane pending</span></div></div>
+        </div>
+      </header>
+      <div class="toolbar"><input class="search" id="search" type="search" placeholder="Search story IDs, features, criteria..." aria-label="Search stories"><button class="tool-button" id="print">Print / PDF</button><button class="tool-button" id="reset">Reset</button></div>
+      <div class="content">
+        <section class="overview"><div class="metric"><b>8</b><span>epics</span></div><div class="metric"><b>22</b><span>features</span></div><div class="metric"><b>40</b><span>user stories</span></div><div class="metric"><b id="visible">40</b><span>stories visible</span></div></section>
+        <div class="callout"><strong>How to read this atlas</strong>Open a story to see its acceptance criteria and the ordered screen lane. Green provenance is a fresh emulator capture. Slate provenance is an existing repository capture. Black frames are deliberate placeholders, not claims that a missing screen exists.</div>
+        <div id="atlas"></div>
+        <section id="limits"><div class="section-head"><h2>Shipped, with boundaries</h2><p>Product claims stay inside the verified implementation.</p></div><div class="limitations"><div class="limitation"><h3>P0.3 legal gate</h3><p>Consent, audit, guardian-attestation, and POCSO data-model seams ship. External legal approval remains open before real child-data launch.</p></div><div class="limitation"><h3>App enforcement</h3><p>My Apps, Installed Apps, DevicePolicyManager hiding, and VPN/DNS enforcement ship. Universal external-launcher interception does not.</p></div><div class="limitation"><h3>Payments</h3><p>Catalog, trial, entitlement, mock checkout, renewal, grace, and the Android Play Billing minimum slice ship. Non-subscription India providers remain open.</p></div><div class="limitation"><h3>Device topology</h3><p>Two emulator instances and the physical phone were requested for live capture. This session exposed one AVD and no authorized phone, so the phone lane remains black.</p></div></div></section>
+      </div>
+      <footer>Source of truth: <code>docs/product/revised_product_features.md</code>. Status cross-check: <code>docs/plans/status_log.md</code> §§8.1, 8.2, 8.4. Capture set: <code>docs/reviews/feature_workflows_2026-10-05/</code> plus <code>revised_product_features_atlas_assets/live_*.png</code>.</footer>
+    </main>
+  </div>
+  <div class="lightbox" id="lightbox"><button aria-label="Close">×</button><img alt="Expanded screen"></div>
+  <script>
+    const A='revised_product_features_atlas_assets/';
+    const L='revised_product_features_atlas_assets/';
+    const ph=(label='No captured user-facing screen',reason='Backend-only, deferred, or not reachable on the available device topology.')=>({label,placeholder:reason});
+    const img=(label,src,type='archive')=>({label,src,type});
+    const stories=[
+      {e:'EPIC-01',et:'Family Identity and Onboarding',eo:'Product Manager / Identity Tech Lead',f:'FEAT-01.1',ft:'Parent OTP authentication and local app protection',fs:'SHIPPED',id:'US-01.1.1',t:'As a parent, I want to sign in with my phone and a one-time code so that I do not need a password.',ac:['The app requests an OTP for a valid phone number.','Development/demo builds expose the stub code; SMS mode uses the configured provider seam without echoing the code.','Invalid, expired, over-attempt, or rate-limited codes are rejected.'],steps:[img('01 / Phone login',A+'01_onboarding/parent_02_login.png'),img('02 / OTP entry',A+'01_onboarding/parent_03_otp.png')]},
+      {e:'EPIC-01',et:'Family Identity and Onboarding',eo:'Product Manager / Identity Tech Lead',f:'FEAT-01.1',ft:'Parent OTP authentication and local app protection',fs:'SHIPPED',id:'US-01.1.2',t:'As a parent, I want a local PIN gate so that a child cannot open parent controls on a shared device.',ac:['A parent creates a PIN after successful OTP verification.','Returning to the app requires the PIN before parent controls are shown.','Session and PIN state are stored through the app data layer.'],steps:[img('01 / PIN setup',A+'01_onboarding/parent_04_pin_setup.png')]},
+      {e:'EPIC-01',et:'Family Identity and Onboarding',eo:'Product Manager / Identity Tech Lead',f:'FEAT-01.2',ft:'Child profile and guardian declaration',fs:'SHIPPED',id:'US-01.2.1',t:'As a parent, I want to create a child profile with name, age, relationship, and optional phone number so that policies and alerts are personalized.',ac:['The profile stores the child age band and family ownership.','Required adult-attestation fields are supplied when the flow requires them.','A supplied phone number is available to the low-battery Call Child action.'],steps:[img('01 / Empty child form',A+'02_pairing/parent_01_add_child.png'),img('02 / Filled child form',A+'02_pairing/parent_02_add_child_filled.png'),img('03 / Child added',A+'02_pairing/parent_03_child_added.png')]},
+      {e:'EPIC-01',et:'Family Identity and Onboarding',eo:'Product Manager / Identity Tech Lead',f:'FEAT-01.2',ft:'Child profile and guardian declaration',fs:'SHIPPED',id:'US-01.2.2',t:'As a parent, I want to edit or delete a child profile so that family data stays current.',ac:['Age edits across a band boundary re-derive the age band while preserving custom policy edits.','Name edits require fresh guardian re-attestation.','Deletion soft-deletes, unpairs devices, revokes provision tokens, and preserves required history.'],steps:[ph('No source capture for edit/delete child flow')]},
+      {e:'EPIC-01',et:'Family Identity and Onboarding',eo:'Product Manager / Identity Tech Lead',f:'FEAT-01.3',ft:'Family and child preference surveys',fs:'SHIPPED',id:'US-01.3.1',t:'As a parent, I want a short family survey so that the initial monitoring stance reflects our preferences.',ac:['The survey captures monitoring stance, concerns, and alert preference.','It can be skipped once and reopened from Family settings.'],steps:[img('01 / Family preference survey',A+'01_onboarding/parent_05_survey.png')]},
+      {e:'EPIC-01',et:'Family Identity and Onboarding',eo:'Product Manager / Identity Tech Lead',f:'FEAT-01.3',ft:'Family and child preference surveys',fs:'SHIPPED',id:'US-01.3.2',t:'As a parent, I want a child habits and interests survey so that the recommended policy is age-aware.',ac:['The wizard captures digital habits, interests, and safety-profile choices.','Recommendations use age tiers and selected interests.','Applying recommendations writes screen-time, bedtime, and app-rule changes through the policy API.'],steps:[img('01 / Survey habits',A+'01_onboarding/parent_06_survey2.png'),img('02 / Personalize prompt',A+'02_pairing/parent_05_personalize_prompt.png')]},
+      {e:'EPIC-01',et:'Family Identity and Onboarding',eo:'Product Manager / Identity Tech Lead',f:'FEAT-01.4',ft:'Co-parent and account lifecycle',fs:'SHIPPED WITH LIMITATION',id:'US-01.4.1',t:'As a primary guardian, I want to invite a co-parent so that another trusted adult can participate in the family.',ac:['A primary guardian issues a time-limited, single-use invite code.','A joined co-parent receives family-scoped access.','A co-parent cannot issue primary-only invites or bypass family authorization.'],steps:[ph('No source capture for co-parent invite flow')]},
+      {e:'EPIC-01',et:'Family Identity and Onboarding',eo:'Product Manager / Identity Tech Lead',f:'FEAT-01.4',ft:'Co-parent and account lifecycle',fs:'SHIPPED WITH LIMITATION',id:'US-01.4.2',t:'As a parent, I want account recovery and OTP hardening so that access remains recoverable without weakening identity controls.',ac:['OTP attempts are capped and requests are rate-limited.','OTP codes are persisted as hashes when persistence is enabled.','The separate biometric PIN-gate enhancement remains outside the current scope.'],steps:[ph('Backend/account state; no dedicated user-facing capture')]},
+      {e:'EPIC-02',et:'Child Device Pairing and Protection',eo:'Child Platform Product Manager / Android Tech Lead',f:'FEAT-02.1',ft:'Guided child-device installation and pairing',fs:'SHIPPED',id:'US-02.1.1',t:'As a parent, I want a guided three-step device setup so that I know how to install and pair the child app.',ac:['The wizard presents Install, Get Pairing Code, and Pair steps.','Back navigation moves within the wizard before exiting.','The final step uses the real pairing approval flow.'],steps:[img('01 / Install step',A+'02_pairing/parent_08_add_device_step1.png'),img('02 / Get code',A+'02_pairing/parent_09_pairing_code.png'),img('03 / Pair step',A+'02_pairing/parent_10_pair_step3.png')]},
+      {e:'EPIC-02',et:'Child Device Pairing and Protection',eo:'Child Platform Product Manager / Android Tech Lead',f:'FEAT-02.1',ft:'Guided child-device installation and pairing',fs:'SHIPPED',id:'US-02.1.2',t:'As a child, I want to enter the parent’s pairing code so that my device can join the correct family without a parent login on my phone.',ac:['The parent creates a six-character pairing session.','The child joins with the code and waits for approval.','Approval issues a device-scoped provision token, never a parent session token.','Expired, reused, invalid, or cross-family sessions are rejected.'],steps:[img('01 / Child role entry',A+'02_pairing/child_01_role_select.png'),img('02 / Live child state',L+'live_child_dashboard.png','live')]},
+      {e:'EPIC-02',et:'Child Device Pairing and Protection',eo:'Child Platform Product Manager / Android Tech Lead',f:'FEAT-02.2',ft:'Parent-led Protection Setup',fs:'SHIPPED',id:'US-02.2.1',t:'As a parent, I want the child device to request the required protection grants so that enforcement is explicit and visible.',ac:['Pairing routes the child to Protection Setup before the child dashboard.','The gate explains VPN, device admin, usage access, battery, notification, and lockdown requirements.','VPN consent and device-admin activation use Android system flows.','Hard-required grants block Finish; optional grants do not silently block.','The gate re-checks grants on resume and can be reopened.'],steps:[img('01 / Live Protection Setup',L+'live_protection_setup.png','live'),ph('02 / Android VPN consent dialog','System dialog capture not available in the current session'),ph('03 / Device admin activation','System Settings capture not available in the current session')]},
+      {e:'EPIC-02',et:'Child Device Pairing and Protection',eo:'Child Platform Product Manager / Android Tech Lead',f:'FEAT-02.3',ft:'Device integrity and protection health',fs:'SHIPPED WITH LIMITATION',id:'US-02.3.1',t:'As a parent, I want to know when child protections lapse so that I can act before safety coverage is lost.',ac:['The SDK detects supported VPN, usage, device-admin, app, battery, SIM, airplane-mode, and account-share signals.','Lapses are deduplicated and mapped to severity.','The child reports lapses through the provision-token endpoint.','Complete uninstall-detection/offline escalation remains backlogged.'],steps:[img('01 / Device surface',A+'02_pairing/parent_07_devices_empty.png')]},
+      {e:'EPIC-03',et:'Policy, App, and Web Safety',eo:'Safety Product Manager / Policy Tech Lead',f:'FEAT-03.1',ft:'Age-band policy controls',fs:'SHIPPED',id:'US-03.1.1',t:'As a parent, I want age-band defaults and editable limits so that each child starts with sensible controls.',ac:['Defaults exist for C5TO10, C10TO14, and C15TO18.','Parents can edit limits, bedtime, app rules, web categories, and risk toggles.','Policy changes are versioned and audit-logged.','Child devices receive policy and entitlement through /sync.'],steps:[ph('No source capture for Family Controls policy editor')]},
+      {e:'EPIC-03',et:'Policy, App, and Web Safety',eo:'Safety Product Manager / Policy Tech Lead',f:'FEAT-03.2',ft:'Web filtering and DNS enforcement',fs:'SHIPPED',id:'US-03.2.1',t:'As a parent, I want to block categories of risky websites without typing individual URLs.',ac:['Controls show the versioned catalog and blocked-category count.','Saving a category change updates policy and increments its version.','Category, allowlist, and blocklist decisions run on the child device.'],steps:[ph('No source capture for category editor')]},
+      {e:'EPIC-03',et:'Policy, App, and Web Safety',eo:'Safety Product Manager / Policy Tech Lead',f:'FEAT-03.2',ft:'Web filtering and DNS enforcement',fs:'SHIPPED',id:'US-03.2.2',t:'As a child, I want blocked content to show a clear explanation so that I understand what happened.',ac:['Blocked DNS requests receive NXDOMAIN through the local tunnel.','The app shows a Blocked by Traanaa education screen with host and reason.','Supported bypass signals are detected and reported.'],steps:[img('01 / Live Filtering Demo',L+'live_filtering_demo.png','live'),ph('02 / Blocked by Traanaa education screen','Not reached in current live capture')]},
+      {e:'EPIC-03',et:'Policy, App, and Web Safety',eo:'Safety Product Manager / Policy Tech Lead',f:'FEAT-03.3',ft:'My Apps and Installed Apps enforcement surfaces',fs:'SHIPPED WITH LIMITATION',id:'US-03.3.1',t:'As a child, I want to see which tracked apps are blocked or allowed before opening them.',ac:['Tracked apps show live policy verdicts.','Blocked apps sort first and route to education.','Allowed installed apps launch through the Android launcher intent.'],steps:[img('01 / Live My Apps',L+'live_my_apps.png','live')]},
+      {e:'EPIC-03',et:'Policy, App, and Web Safety',eo:'Safety Product Manager / Policy Tech Lead',f:'FEAT-03.3',ft:'My Apps and Installed Apps enforcement surfaces',fs:'SHIPPED WITH LIMITATION',id:'US-03.3.2',t:'As a parent or tester, I want an installed-app inventory so that I can inspect live enforcement coverage.',ac:['Launcher apps list blocked, allowed, and not-installed verdicts.','The screen shows the number of blocked apps.','Universal external-launcher interception is not promised.'],steps:[img('01 / Live Installed Apps',L+'live_installed_apps.png','live')]},
+      {e:'EPIC-04',et:'Visibility, Location, and Usage',eo:'Family Safety Product Manager / Data Platform Tech Lead',f:'FEAT-04.1',ft:'Screen-time, usage, and device health',fs:'SHIPPED WITH LIMITATION',id:'US-04.1.1',t:'As a parent, I want screen time by app and timeline views so that I can discuss patterns with my child.',ac:['By App and Timeline read their backend endpoints.','Daily and seven-day usage use device-local time buckets.','Heartbeat data determines Online/Offline.','The full cross-device aggregate dashboard remains Phase 2.'],steps:[img('01 / Empty dashboard',A+'03_dashboard/parent_01_dashboard_empty.png'),img('02 / Child dashboard',A+'02_pairing/parent_04_dashboard_child.png'),img('03 / Live child state',L+'live_child_dashboard.png','live')]},
+      {e:'EPIC-04',et:'Visibility, Location, and Usage',eo:'Family Safety Product Manager / Data Platform Tech Lead',f:'FEAT-04.1',ft:'Screen-time, usage, and device health',fs:'SHIPPED WITH LIMITATION',id:'US-04.1.2',t:'As a child, I want to see my own usage and points so that monitoring is transparent.',ac:['My Stats shows usage, policy context, and points ledger.','Data is scoped to the paired child device and family.'],steps:[img('01 / Live child dashboard',L+'live_child_dashboard.png','live'),ph('02 / My Stats detail','Not reached in current live capture')]},
+      {e:'EPIC-04',et:'Visibility, Location, and Usage',eo:'Family Safety Product Manager / Data Platform Tech Lead',f:'FEAT-04.2',ft:'Live location and safe zones',fs:'SHIPPED',id:'US-04.2.1',t:'As a parent, I want to see a child’s current and historical location so that I can check their journey.',ac:['The parent can view live point, safe-zone circles, trail, and history rows.','History supports entitlement-bound 24-hour, 7-day, and 30-day windows.','Stored location remains geohash-based while display responses may decode coordinates.'],steps:[ph('No source capture for live location map')]},
+      {e:'EPIC-04',et:'Visibility, Location, and Usage',eo:'Family Safety Product Manager / Data Platform Tech Lead',f:'FEAT-04.2',ft:'Live location and safe zones',fs:'SHIPPED',id:'US-04.2.2',t:'As a parent, I want geofence alerts and safe-zone metadata so that arrival and exit events are meaningful.',ac:['Safe zones support CRUD, radius, contact details, and expiry.','Enter and exit events create deduplicated alerts.','Safe-zone entry can award points once per zone per day.','Consent enforcement remains gated off until the legal gate closes.'],steps:[ph('No source capture for safe-zone editor and alert state')]},
+      {e:'EPIC-04',et:'Visibility, Location, and Usage',eo:'Family Safety Product Manager / Data Platform Tech Lead',f:'FEAT-04.3',ft:'Child My Day location transparency',fs:'SHIPPED',id:'US-04.3.1',t:'As a child, I want to see my own day timeline so that location monitoring is not a black box.',ac:['The child can open My Day and view available location history.','The screen uses the same family-scoped location rules as the parent surface.'],steps:[ph('No source capture for My Day detail')]},
+      {e:'EPIC-05',et:'Alerts, Communication, and Emergency Safety',eo:'Safety Product Manager / Trust & Notifications Tech Lead',f:'FEAT-05.1',ft:'Risk alerts and weekly reporting',fs:'SHIPPED',id:'US-05.1.1',t:'As a parent, I want severity-ranked alerts with evidence so that I can decide what action to take.',ac:['Risk events deduplicate and map to severity.','Alert detail can show child, event, timing, evidence, and last-known location.','A parent can acknowledge an alert and the mutation is audit-logged.'],steps:[ph('No source capture for alert detail')]},
+      {e:'EPIC-05',et:'Alerts, Communication, and Emergency Safety',eo:'Safety Product Manager / Trust & Notifications Tech Lead',f:'FEAT-05.1',ft:'Risk alerts and weekly reporting',fs:'SHIPPED',id:'US-05.1.2',t:'As a parent, I want a weekly/daily report so that I can review trends without opening every event.',ac:['The report includes total time, top apps, alerts, exits, and blocks.','Report windows resolve against the child device timezone.'],steps:[ph('No source capture for weekly report')]},
+      {e:'EPIC-05',et:'Alerts, Communication, and Emergency Safety',eo:'Safety Product Manager / Trust & Notifications Tech Lead',f:'FEAT-05.2',ft:'Parent-to-child messages and safe check-in',fs:'SHIPPED',id:'US-05.2.1',t:'As a parent, I want to attach a message when acknowledging an alert so that the child receives context, not just a status change.',ac:['Acknowledge & Message creates an unread child message.','Only the matching provision-token device can read and mark it read.','Messages re-poll on app resume.'],steps:[ph('No source capture for acknowledge-and-message dialog')]},
+      {e:'EPIC-05',et:'Alerts, Communication, and Emergency Safety',eo:'Safety Product Manager / Trust & Notifications Tech Lead',f:'FEAT-05.2',ft:'Parent-to-child messages and safe check-in',fs:'SHIPPED',id:'US-05.2.2',t:'As a child, I want a one-tap I’m safe action so that my parent receives reassurance quickly.',ac:['The child submits a device-scoped check-in.','The parent sees the latest check-in in family scope.','Parent and device tokens cannot cross the other role’s endpoint boundary.'],steps:[ph('No source capture for safe check-in confirmation')]},
+      {e:'EPIC-05',et:'Alerts, Communication, and Emergency Safety',eo:'Safety Product Manager / Trust & Notifications Tech Lead',f:'FEAT-05.3',ft:'Low-battery remediation',fs:'SHIPPED',id:'US-05.3.1',t:'As a parent, I want practical actions when the child device battery is low so that protection does not silently disappear.',ac:['Low-battery alert includes last-known location when available.','Parent can send plug-in and power-saver nudges as child messages.','Parent can call the child when a phone number exists.','Power-saver is a nudge, not an unapproved device-policy write.'],steps:[ph('No source capture for battery remediation card')]},
+      {e:'EPIC-05',et:'Alerts, Communication, and Emergency Safety',eo:'Safety Product Manager / Trust & Notifications Tech Lead',f:'FEAT-05.4',ft:'SOS and emergency contacts',fs:'SHIPPED',id:'US-05.4.1',t:'As a child, I want to send an SOS even during lock or bedtime restrictions so that urgent safety actions remain reachable.',ac:['SOS requires explicit confirmation.','The device creates a CRITICAL SOS alert outside ordinary bedtime policy.','Parent notification uses configured push/SMS/email.','Trusted contacts receive SMS through the provider seam where configured.'],steps:[ph('No source capture for SOS confirmation and sent state')]},
+      {e:'EPIC-05',et:'Alerts, Communication, and Emergency Safety',eo:'Safety Product Manager / Trust & Notifications Tech Lead',f:'FEAT-05.4',ft:'SOS and emergency contacts',fs:'SHIPPED',id:'US-05.4.2',t:'As a parent, I want to maintain trusted emergency contacts so that SOS escalation reaches the right people.',ac:['Contacts can be listed, added, and soft-deleted within the family.','Contact operations are family-scoped and audit-logged.'],steps:[ph('No source capture for emergency contacts management')]},
+      {e:'EPIC-05',et:'Alerts, Communication, and Emergency Safety',eo:'Safety Product Manager / Trust & Notifications Tech Lead',f:'FEAT-05.5',ft:'Notification preferences',fs:'SHIPPED',id:'US-05.5.1',t:'As a parent, I want quiet hours and per-channel controls so that routine alerts respect family preferences.',ac:['Push, SMS, and email can be toggled independently.','Quiet hours use child-device timezone with documented fallback.','CRITICAL notifications are never suppressed.'],steps:[ph('No source capture for notification preferences')]},
+      {e:'EPIC-06',et:'Child Agency, Rewards, and Education',eo:'Child Experience Product Manager / Product Designer',f:'FEAT-06.1',ft:'Requests and parent review queue',fs:'SHIPPED',id:'US-06.1.1',t:'As a child, I want to request more screen time, app access, or an outing so that I can ask for an exception transparently.',ac:['The child can submit SCREEN_TIME, APP_ACCESS, and OUTING requests.','True child devices use the provision-token API and show an honest unpaired error instead of fake success.'],steps:[ph('No source capture for child request dialog')]},
+      {e:'EPIC-06',et:'Child Agency, Rewards, and Education',eo:'Child Experience Product Manager / Product Designer',f:'FEAT-06.1',ft:'Requests and parent review queue',fs:'SHIPPED',id:'US-06.1.2',t:'As a parent, I want to approve or reject requests so that exceptions remain supervised.',ac:['The parent sees family-scoped pending requests.','A decision is persisted and visible through the supported child flow.','Cross-family requests are rejected.'],steps:[ph('No source capture for Review Queue decision state')]},
+      {e:'EPIC-06',et:'Child Agency, Rewards, and Education',eo:'Child Experience Product Manager / Product Designer',f:'FEAT-06.2',ft:'Points, safety quests, and reward shop',fs:'SHIPPED',id:'US-06.2.1',t:'As a child, I want to earn points for safety quests so that positive behavior is visible and rewarding.',ac:['The child sees balance, earned points, spent points, and ledger history.','Quest completion writes an earn transaction through the device endpoint.','Reward redemption writes a spend transaction and prevents overspending.'],steps:[img('01 / Live child dashboard',L+'live_child_dashboard.png','live'),ph('02 / Reward ledger detail','Not reached in current live capture')]},
+      {e:'EPIC-06',et:'Child Agency, Rewards, and Education',eo:'Child Experience Product Manager / Product Designer',f:'FEAT-06.3',ft:'Learning and emergency helplines',fs:'SHIPPED',id:'US-06.3.1',t:'As a parent or child, I want age-appropriate digital-safety learning so that the app builds understanding, not just restrictions.',ac:['Parent Learn includes safety articles and support resources.','Child Learn & Play includes literacy content, stories, and micro-courses.','India-relevant helplines can open a dial action.'],steps:[ph('No source capture for Learn and Learn & Play detail')]},
+      {e:'EPIC-07',et:'Plans, Entitlements, and Commercial Readiness',eo:'Monetization Product Manager / Payments Tech Lead',f:'FEAT-07.1',ft:'Plan catalog, trial, and subscription state',fs:'SHIPPED WITH LIMITATION',id:'US-07.1.1',t:'As a parent, I want to compare plans and start a trial so that I can understand product value before paying.',ac:['The app shows plan catalog and current entitlement.','A family can start and cancel a trial.','Entitlement synchronizes to the child SDK.'],steps:[ph('No source capture for plan catalog and trial')]},
+      {e:'EPIC-07',et:'Plans, Entitlements, and Commercial Readiness',eo:'Monetization Product Manager / Payments Tech Lead',f:'FEAT-07.1',ft:'Plan catalog, trial, and subscription state',fs:'SHIPPED WITH LIMITATION',id:'US-07.1.2',t:'As a parent, I want a subscription checkout flow so that an upgrade has a recorded payment state.',ac:['Checkout creates a pending payment and confirmation activates the subscription.','Renewal, expiry, failed payment, and grace-period states are represented.','The demo uses a mock provider; production Razorpay, PayU, or UPI integration remains open.'],steps:[ph('No source capture for checkout confirmation')]},
+      {e:'EPIC-08',et:'Trustworthy Platform Operations',eo:'Engineering Manager / Security Lead',f:'FEAT-08.1',ft:'Secure, family-scoped backend',fs:'SHIPPED WITH LIMITATION',id:'US-08.1.1',t:'As a family, I want my records isolated from other families so that child data is not cross-visible.',ac:['Family-scoped endpoints enforce tenant ownership.','Device-scoped endpoints enforce provision-token child ownership.','Mutations are audit-logged and invalid authorization returns correct 401/403 status.'],steps:[ph('Backend authorization story; no user-facing screen')]},
+      {e:'EPIC-08',et:'Trustworthy Platform Operations',eo:'Engineering Manager / Security Lead',f:'FEAT-08.1',ft:'Secure, family-scoped backend',fs:'SHIPPED WITH LIMITATION',id:'US-08.1.2',t:'As an operator, I want database migrations, retention, and expiry cleanup so that the service remains maintainable.',ac:['Flyway migrations create and evolve the product schema.','Location retention is tier-aware and indexed.','Expired pairing, invite, and OTP rows are cleaned without deleting live records.'],steps:[ph('Backend operations story; no user-facing screen')]},
+      {e:'EPIC-08',et:'Trustworthy Platform Operations',eo:'Engineering Manager / Security Lead',f:'FEAT-08.2',ft:'Verification and deployment tooling',fs:'SHIPPED',id:'US-08.2.1',t:'As a product team, we want repeatable end-to-end demos so that parent and child features can be reviewed on an emulator.',ac:['Parent and child demo scripts build, boot, install, seed, and drive the app.','Two-device pairing can run with separate emulator sessions.','Appium E2E covers parent screens, child loops, API consistency, and tenant isolation.'],steps:[img('01 / Live child review state',L+'live_child_dashboard.png','live'),ph('02 / Parent and child side-by-side','Second emulator was not available in this capture session')]},
+      {e:'EPIC-08',et:'Trustworthy Platform Operations',eo:'Engineering Manager / Security Lead',f:'FEAT-08.2',ft:'Verification and deployment tooling',fs:'SHIPPED',id:'US-08.2.2',t:'As an operator, I want a deployable backend path so that the app can move beyond local demos.',ac:['The backend has a container and GCP Cloud Run deployment path.','Runtime configuration is environment-driven for database, JWT, port, and providers.','CI runs Android build/tests/lint and backend tests.'],steps:[ph('Deployment/CI story; no user-facing screen')]}
+    ];
+    const epicOrder=[...new Set(stories.map(s=>s.e))];
+    const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    function statusClass(s){ return s==='SHIPPED'?'shipped':'limited'; }
+    function render(){
+      const q=(document.getElementById('search').value||'').toLowerCase().trim();
+      const atlas=document.getElementById('atlas'); const nav=document.getElementById('nav'); let visible=0;
+      atlas.innerHTML=''; nav.innerHTML='';
+      epicOrder.forEach((e,i)=>{
+        const ep=stories.filter(s=>s.e===e); const first=ep[0]; const eid='epic-'+e.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+        const matches=ep.filter(s=>!q || [s.e,s.et,s.f,s.ft,s.id,s.t,s.fs,...s.ac].join(' ').toLowerCase().includes(q));
+        const navBtn=document.createElement('button'); navBtn.dataset.epic=e; navBtn.innerHTML=`${e} <span class="count">${matches.length}</span>`; navBtn.addEventListener('click',()=>document.getElementById(eid).scrollIntoView({behavior:'smooth'})); nav.appendChild(navBtn);
+        if(!matches.length) return;
+        visible+=matches.length;
+        const section=document.createElement('section'); section.id=eid; section.className='epic';
+        section.innerHTML=`<div class="section-head"><h2>${esc(e)} / ${esc(first.et)}</h2><p>${esc(first.eo)}</p></div>`;
+        const objective=document.createElement('div'); objective.className='callout'; objective.innerHTML=`<strong>Epic objective</strong>${esc({
+          'EPIC-01':'Let a guardian create and protect a family account, establish a child profile, and configure an age-appropriate starting policy.',
+          'EPIC-02':'Pair a child device to the correct family and activate protections required for the child experience.',
+          'EPIC-03':'Give parents understandable controls and apply them on the child device through policy synchronization and local enforcement.',
+          'EPIC-04':'Give parents useful, time-aware visibility into a child’s devices, activity, and location while keeping sensitive data scoped.',
+          'EPIC-05':'Help parents and children respond to safety signals quickly through two-way, auditable communication.',
+          'EPIC-06':'Make safety understandable and give children constructive ways to ask, learn, earn, and participate.',
+          'EPIC-07':'Represent product tiers and enforce entitlement boundaries consistently across parent and child surfaces.',
+          'EPIC-08':'Make the shipped product testable, auditable, deployable, and safe to extend.'
+        }[e])}`; section.appendChild(objective);
+        const featureKeys=[...new Set(matches.map(s=>s.f))];
+        featureKeys.forEach(f=>{
+          const group=matches.filter(s=>s.f===f); const one=group[0]; const feature=document.createElement('div'); feature.className='feature';
+          feature.innerHTML=`<div class="feature-head"><div class="feature-id">${esc(f)}</div><div><h3>${esc(one.ft)}</h3><p>Owner: ${esc(one.eo)}</p></div><span class="status ${statusClass(one.fs)}">${esc(one.fs)}</span></div>`;
+          group.forEach((s,n)=>{
+            const details=document.createElement('details'); details.className='story'; details.open=n===0;
+            const stepHtml=s.steps.map((x,j)=>x.placeholder?`<div class="step"><span class="step-label">${esc(x.label)}</span><div class="placeholder">${esc(x.reason||'Placeholder')}</div><small>BLACK PLACEHOLDER</small></div>`:`<div class="step ${x.type==='live'?'live':'archive'}"><span class="step-label">${esc(x.label)}</span><img src="${esc(x.src)}" alt="${esc(s.id+' '+x.label)}"><small>${x.type==='live'?'LIVE EMULATOR CAPTURE':'REPOSITORY CAPTURE'}</small></div>`).join('');
+            details.innerHTML=`<summary><span class="story-id">${esc(s.id)}</span><span class="story-title">${esc(s.t)}</span></summary><div class="story-body"><div><h4>Acceptance criteria</h4><ol class="criteria">${s.ac.map((a,k)=>`<li><strong>AC-${esc(s.id.slice(3))}.${String.fromCharCode(97+k)}:</strong> ${esc(a)}</li>`).join('')}</ol><div class="meta"><span>${esc(s.id)}</span><span>${s.steps.some(x=>x.type==='live')?'Live evidence present':'Evidence gap / archived capture'}</span><span>${s.steps.length} screen state${s.steps.length===1?'':'s'}</span></div></div><div><h4>Step-by-step screen lane</h4><div class="steps">${stepHtml}</div></div></div>`;
+            feature.appendChild(details);
+          });
+          section.appendChild(feature);
+        });
+        atlas.appendChild(section);
+      });
+      document.getElementById('visible').textContent=visible;
+      document.querySelectorAll('.rail button[data-epic]').forEach(b=>b.classList.toggle('active',q && b.querySelector('.count').textContent!=='0'));
+    }
+    document.getElementById('search').addEventListener('input',render);
+    document.getElementById('reset').addEventListener('click',()=>{document.getElementById('search').value='';render();});
+    document.getElementById('print').addEventListener('click',()=>window.print());
+    document.getElementById('expand').addEventListener('click',()=>document.querySelectorAll('.story').forEach(x=>x.open=true));
+    document.getElementById('collapse').addEventListener('click',()=>document.querySelectorAll('.story').forEach(x=>x.open=false));
+    const lb=document.getElementById('lightbox'); lb.addEventListener('click',e=>{if(e.target===lb||e.target.tagName==='BUTTON')lb.classList.remove('show');});
+    document.addEventListener('click',e=>{if(e.target.matches('.step img')){lb.querySelector('img').src=e.target.src;lb.classList.add('show');}});
+    render();
+  </script>
+</body>
+</html>
